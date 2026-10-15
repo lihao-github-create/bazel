@@ -1,0 +1,17 @@
+services:
+  bazel-dev:
+    image: bazel-study:ubuntu22.04
+    build:
+      context: .
+    user: "${DEV_UID:-1000}:${DEV_GID:-1000}"
+    working_dir: /workspace
+    volumes:
+      - ".:/workspace"
+    environment:
+      HOME: /tmp
+    init: true
+    stdin_open: true
+    tty: true
+    command:
+      - sleep
+      - infinity
