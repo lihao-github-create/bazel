@@ -38,6 +38,10 @@ COPY .bazelversion .bazelversion
 
 # Also pin invocations outside a Bazel module; keep this aligned with .bazelversion.
 ENV USE_BAZEL_FALLBACK_VERSION=8.8.1
-RUN test "$(cat .bazelversion)" = "$USE_BAZEL_FALLBACK_VERSION"
+ENV BAZELISK_HOME=/opt/bazelisk
+# Compose can run with any host UID/GID; allow it to reuse and update the cache.
+RUN test "$(cat .bazelversion)" = "$USE_BAZEL_FALLBACK_VERSION" \
+    && bazel --version \
+    && chmod -R a+rwX "$BAZELISK_HOME"
 
 CMD ["bash"]

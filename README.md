@@ -14,7 +14,7 @@
 | Bazel | 8.8.1，由 `.bazelversion` 和镜像回退版本固定 |
 | 开发工具 | GCC/G++、Clang、GDB、CMake、Ninja、Git、curl、Python 3、pkg-config、Eigen |
 
-镜像支持 amd64 和 arm64。Bazelisk 在构建镜像时安装并校验 SHA-256；Bazel 在首次调用时下载。
+镜像支持 amd64 和 arm64。Bazelisk 在构建镜像时安装并校验 SHA-256；Bazel 也在构建时下载，并通过 `bazel --version` 验证。
 
 ## 1. 检查宿主机
 
@@ -27,7 +27,7 @@ docker compose version
 
 `docker version` 应同时显示 Client 和 Server 信息。若无法连接 Docker daemon，请先启动 Docker 并确认当前用户具有访问权限。
 
-构建和首次运行需要网络访问：Docker Hub、Ubuntu 软件源、GitHub 和 Bazel 官方下载服务。后续练习的外部依赖也可能需要联网下载。
+构建镜像需要网络访问：Docker Hub、Ubuntu 软件源、GitHub 和 Bazel 官方下载服务。后续练习的外部依赖也可能需要联网下载。
 
 ## 2. 构建并启动
 
@@ -64,7 +64,7 @@ docker compose exec bazel-dev sh -c 'test -f /workspace/learn_guide.md && test -
 # 不下载 Bazel，应输出 Bazelisk version: v1.29.0。
 docker compose exec bazel-dev bazelisk bazeliskVersion
 
-# 首次执行会下载 Bazel，完成后应输出 bazel 8.8.1。
+# 使用镜像内预下载的 Bazel，无需再次下载，应输出 bazel 8.8.1。
 docker compose exec bazel-dev bazel --version
 
 # 检查基础开发工具，均应输出版本信息。
@@ -106,7 +106,7 @@ docker compose up -d --build bazel-dev
 docker compose down
 ```
 
-源码位于宿主机挂载目录，不随容器删除。当前 `HOME=/tmp`，没有配置持久化缓存卷；删除或重建容器后，Bazelisk 下载缓存和 Bazel 构建缓存可能需要重新生成。`stop` / `start` 会保留原容器中的缓存。
+源码位于宿主机挂载目录，不随容器删除。镜像通过 `BAZELISK_HOME=/opt/bazelisk` 保存预下载的 Bazel，普通用户也可复用和更新此缓存；重建容器后仍可使用镜像内的固定版本。当前 `HOME=/tmp`，没有配置持久化缓存卷，运行期间新增的 Bazel 版本缓存和项目构建缓存不会随容器重建保留。`stop` / `start` 会保留原容器中的缓存。
 
 ## 常见问题
 

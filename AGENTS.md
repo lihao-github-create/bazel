@@ -14,7 +14,7 @@ The `exercises/` and `doc/` directories are currently empty; place runnable exer
 - `docker compose down`: stop and remove the Compose container.
 - `docker compose config`: validate and inspect the resolved Compose configuration.
 
-The image includes C/C++ tools, curl, and Bazelisk 1.29.0 as `bazel`. Keep `.bazelversion` and Dockerfile's `USE_BAZEL_FALLBACK_VERSION` aligned at 8.8.1; the fallback covers directories without a module. First use downloads Bazel and requires network access. Verify with `docker compose exec bazel-dev bazel --version`. Within an exercise module, use `bazel build //...`, `bazel test //...`, or `bazel run //:demo`; the last requires a `demo` target.
+The image includes C/C++ tools, curl, and Bazelisk 1.29.0 as `bazel`. Keep `.bazelversion` and Dockerfile's `USE_BAZEL_FALLBACK_VERSION` aligned at 8.8.1; the fallback covers directories without a module. Image builds download and verify Bazel in `/opt/bazelisk`; runtime users reuse this cache. Verify with `docker compose exec bazel-dev bazel --version`. Within an exercise module, use `bazel build //...`, `bazel test //...`, or `bazel run //:demo`; the last requires a `demo` target.
 
 ## Coding Style & Naming Conventions
 
