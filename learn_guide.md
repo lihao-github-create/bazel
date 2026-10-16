@@ -115,6 +115,8 @@ bazel build //:demo
 
 # 阶段 2：真正理解 Bazel 工程结构
 
+阶段 2 的实践总结见：[阶段 2：理解 Bazel 工程结构](doc/stage2-bazel-structure.md)。
+
 建议用时：**2～4 天**
 
 这是最重要的阶段。
