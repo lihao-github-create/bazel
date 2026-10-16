@@ -4,15 +4,15 @@
 
 ## 环境组成
 
-| 项目 | 配置 |
-| --- | --- |
-| 基础系统 | Ubuntu 22.04 |
-| Compose 服务 | `bazel-dev` |
-| 镜像 | `bazel-study:ubuntu22.04` |
-| 工作目录 | `/workspace`，挂载当前仓库 |
-| Bazelisk | 1.29.0，通过 `bazel` 或 `bazelisk` 调用 |
-| Bazel | 8.8.1，由 `.bazelversion` 和镜像回退版本固定 |
-| 开发工具 | GCC/G++、Clang、GDB、CMake、Ninja、Git、curl、Python 3、pkg-config、Eigen |
+| 项目         | 配置                                                                      |
+| ------------ | ------------------------------------------------------------------------- |
+| 基础系统     | Ubuntu 22.04                                                              |
+| Compose 服务 | `bazel-dev`                                                             |
+| 镜像         | `bazel-study:ubuntu22.04`                                               |
+| 工作目录     | `/workspace`，挂载当前仓库                                              |
+| Bazelisk     | 1.29.0，通过 `bazel` 或 `bazelisk` 调用                               |
+| Bazel        | 8.8.1，由 `.bazelversion` 和镜像回退版本固定                            |
+| 开发工具     | GCC/G++、Clang、GDB、CMake、Ninja、Git、curl、Python 3、pkg-config、Eigen |
 
 镜像支持 amd64 和 arm64。Bazelisk 在构建镜像时安装并校验 SHA-256；Bazel 也在构建时下载，并通过 `bazel --version` 验证。
 

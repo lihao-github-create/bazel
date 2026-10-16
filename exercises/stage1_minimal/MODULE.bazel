@@ -1,0 +1,4 @@
+module(
+    name = "stage1_minimal",
+    version = "0.1.0",
+)

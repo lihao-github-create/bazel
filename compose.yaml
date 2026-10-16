@@ -3,12 +3,16 @@ services:
     image: bazel-study:ubuntu22.04
     build:
       context: .
+      args:
+        DEV_UID: "${DEV_UID:-1000}"
+        DEV_GID: "${DEV_GID:-1000}"
     user: "${DEV_UID:-1000}:${DEV_GID:-1000}"
     working_dir: /workspace
     volumes:
       - ".:/workspace"
     environment:
       HOME: /tmp
+      USER: bazel
     init: true
     stdin_open: true
     tty: true

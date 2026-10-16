@@ -43,6 +43,9 @@ build/
 Build/
 build-*/
 
+# Bazel output symlinks and build directories
+bazel-*
+
 # CMake generated files
 CMakeFiles/
 CMakeCache.txt

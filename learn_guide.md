@@ -15,6 +15,8 @@
 
 # 阶段 1：先能用 Bazel
 
+阶段 1 的实践总结见：[阶段 1：最小 C++ Bazel 项目](doc/stage1-bazel-basics.md)。
+
 建议用时：**1～2 天**
 
 这一阶段不要研究 Bazel 内部机制。

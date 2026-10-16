@@ -1,6 +1,8 @@
 FROM ubuntu:22.04
 
 ARG DEBIAN_FRONTEND=noninteractive
+ARG DEV_UID=1000
+ARG DEV_GID=1000
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -13,9 +15,18 @@ RUN apt-get update \
         git \
         libeigen3-dev \
         ninja-build \
+        passwd \
         pkg-config \
         python3 \
     && rm -rf /var/lib/apt/lists/*
+
+RUN groupadd --gid "${DEV_GID}" bazel \
+    && useradd \
+        --uid "${DEV_UID}" \
+        --gid "${DEV_GID}" \
+        --create-home \
+        --shell /bin/bash \
+        bazel
 
 # Keep the release URL and architecture-specific checksums in sync when upgrading.
 RUN set -eu; \
@@ -39,6 +50,7 @@ COPY .bazelversion .bazelversion
 # Also pin invocations outside a Bazel module; keep this aligned with .bazelversion.
 ENV USE_BAZEL_FALLBACK_VERSION=8.8.1
 ENV BAZELISK_HOME=/opt/bazelisk
+ENV USER=bazel
 # Compose can run with any host UID/GID; allow it to reuse and update the cache.
 RUN test "$(cat .bazelversion)" = "$USE_BAZEL_FALLBACK_VERSION" \
     && bazel --version \
