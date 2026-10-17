@@ -1,0 +1,9 @@
+module(
+    name = "stage2_package",
+    version = "0.1.0",
+)
+
+bazel_dep(
+    name = "googletest",
+    version = "1.14.0.bcr.1",
+)
