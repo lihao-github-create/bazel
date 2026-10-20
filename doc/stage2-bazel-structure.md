@@ -81,7 +81,7 @@ Label 的一般形式是：
 
 其中 `//app:app` 表示 `app` package 中的 `app` target，`//libs/math:math` 表示 `libs/math` package 中的 `math` target。
 
-在 `app/BUILD` 中，`:math` 只会解析为当前 package 的 `//app:math`，不会自动到 `//libs/math` 查找。因此跨 package 依赖要使用完整 Label：
+在 `app/BUILD` 中，`:math` 只会解析为当前 package 的 `//app:math`，不会自动到 `//libs/math` 查找。因此**跨 package 依赖要使用完整 Label**：
 
 ```text
 //libs/math:math
@@ -142,6 +142,20 @@ bazel query 'deps(//app:app)'
 ```
 
 结果除了 `//app:app` 和 `//libs/math:math`，还可能包含源文件 target，以及 Bazel C++ 规则自动引入的工具链 target。工具链依赖属于 Bazel 的隐式构建依赖，初学阶段只需知道它们会出现在完整依赖查询中。
+
+`labels()` 和 `deps()` 的关注点不同：
+
+- `labels(attr, expr)` 查看 `expr` 中每个 target 的指定属性 `attr` 直接引用了哪些 Label。例如：
+
+  ```bash
+  bazel query 'labels(srcs, //libs/math:math)'
+  ```
+
+  该命令查看 `//libs/math:math` 的 `srcs` 属性，结果可能包含 `//libs/math:math.cpp` 等源文件 target。它只读取这个属性的直接引用，不会递归展开这些文件或 target 的依赖。
+
+- `deps(expr)` 沿构建依赖边遍历，从 `expr` 中的 target 得到直接依赖和传递依赖组成的依赖闭包，通常也包含起始 target 本身。例如 `deps(//app:app)` 会继续展开 `app` 对 `math` 的依赖，以及构建过程中相关的源文件和工具链 target。
+
+因此，`labels()` 适合查看某个规则属性声明了什么，`deps()` 适合查看构建一个 target 需要经过哪些依赖。
 
 ## 常用验证命令
 
